@@ -17,7 +17,7 @@ public class WalletBasicService implements IWalletBasicService {
 		 
 	}
 	 LocalDate tDate = LocalDate.now();
-	 static String namePattern = "[A-Z]";
+	 static String namePattern = "[A-Z][a-z]";
 	 static String numberPattern = "(\\d){10}";
 	 static String passwordPattern = "[A-Z]{1}[a-z]{2,6}(\\d){1,4}(\\W){1}";
 	

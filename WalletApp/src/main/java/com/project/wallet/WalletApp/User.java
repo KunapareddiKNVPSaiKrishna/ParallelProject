@@ -1,6 +1,6 @@
 package com.project.wallet.WalletApp;
 
-import java.util.InputMismatchException;
+
 import java.util.Scanner;
 
 import com.project.wallet.bean.Account;
@@ -13,9 +13,9 @@ public static void main(String[] args) throws WalletException  {
 
 	int choice, age = 0,custAccId;
 	String phoneNo,name = null,pwd;
-boolean nameFlag=false,ageFlag=false,pwdFlag=false,phoneNoFlag=false,amtFlag=false;
-double amt;
-boolean loginCheck = false;
+    boolean nameFlag=false,ageFlag=false,pwdFlag=false,phoneNoFlag=false,amtFlag=false;
+    double amt;
+    boolean loginCheck = false;
 
 Scanner get = new Scanner(System.in);
 
@@ -181,17 +181,7 @@ Scanner get = new Scanner(System.in);
 								case 4:
 									System.out.println("Enter the Account Number to which u have to send :");
 									int ftAccNo = get.nextInt();
-									String ftName;
 									double ftAmt;
-									do
-									{
-										System.out.println("Enter the name of the Account Holder :");
-										 ftName = get.next();
-										nameFlag=service.validateCustName(ftName);
-										if(nameFlag==false)
-											System.out.println("Name should be entered in proper format(eg.Robert Downey)");
-										
-									}while(nameFlag==false);
 									
 									do
 									{
