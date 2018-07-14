@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import com.project.wallet.bean.Account;
+import com.project.wallet.bean.Customer;
 import com.project.wallet.dao.IWalletAccess;
 import com.project.wallet.dao.WalletAccess;
 import com.project.wallet.exception.WalletException;
 
 public class WalletBasicService implements IWalletBasicService {
+	Customer cus = new Customer();
 	Account temp = new Account();
 	IWalletAccess dao;
 	 public WalletBasicService() {
@@ -101,7 +103,7 @@ public boolean checkPassword(String pwd) {
 }
 
 public String currentUser() {
-	return temp.getCustName();
+	return cus.getCustName();
 }
 
 public boolean transferAmt(int toAccNo, double money) throws WalletException {

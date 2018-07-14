@@ -5,9 +5,6 @@ import java.util.ArrayList;
 public class Account {
 	
 	private int accNum;
-	private String custName;
-	private String custPhoneNo;
-	private int custAge;
 	private double custBal;
 	static private int accNumGen = 10100;
 	private String custPwd;
@@ -23,24 +20,6 @@ public class Account {
 	}
 	public void setAccNum() {
 		this.accNum = accNumGen++;
-	}
-	public String getCustName() {
-		return custName;
-	}
-	public void setCustName(String custName) {
-		this.custName = custName;
-	}
-	public String getCustPhoneNo() {
-		return custPhoneNo;
-	}
-	public void setCustPhoneNo(String custPhoneNo) {
-		this.custPhoneNo = custPhoneNo;
-	}
-	public int getCustAge() {
-		return custAge;
-	}
-	public void setCustAge(int custAge) {
-		this.custAge = custAge;
 	}
 	public double getCustBal() {
 		return custBal;

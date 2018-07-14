@@ -1,9 +1,9 @@
 package com.project.wallet.WalletApp;
 
-
 import java.util.Scanner;
 
 import com.project.wallet.bean.Account;
+import com.project.wallet.bean.Customer;
 import com.project.wallet.exception.WalletException;
 import com.project.wallet.service.WalletBasicService;
 
@@ -11,16 +11,15 @@ public class User {
 public static void main(String[] args) throws WalletException  {
 	
 
-	int choice, age = 0,custAccId;
-	String phoneNo,name = null,pwd;
+	int choice, age,custAccId;
+	String phoneNo,name,pwd;
     boolean nameFlag=false,ageFlag=false,pwdFlag=false,phoneNoFlag=false,amtFlag=false;
     double amt;
     boolean loginCheck = false;
 
 Scanner get = new Scanner(System.in);
 
-
-	WalletBasicService service = new WalletBasicService();
+    WalletBasicService service = new WalletBasicService();
 	do {
 		System.out.println("\n************* XYZ MyWallet *************");
 		System.out.println("Choose an operation");
@@ -34,35 +33,34 @@ Scanner get = new Scanner(System.in);
 		switch(choice)
 		{
 		
-		
-			case 1 :// Creating a new Account for the user
-				{
-					get.nextLine();
+		case 1 :// Creating a new Account for the user
+				
+		{
 					//customer name
-					while(nameFlag==false)
+					do
 					{
 						System.out.println("Enter the name of the Customer :");
+						name=get.next();
 						name=get.nextLine();
 						nameFlag=service.validateCustName(name);
-						nameFlag = true;
+						nameFlag=true;
 						if(nameFlag==false)
 							System.out.println("Name should be entered in proper format(eg.Robert Downey)");
 						
-					}
+					}while(nameFlag==false);
 					
 			
 					//Customer Age
-					while(ageFlag==false)
+					do
 					{
 					System.out.println("Enter Customer age : ");
 					
 					age = get.nextInt();
 					ageFlag= service.validateCustAge(age);
 					if(ageFlag==false)
-						{System.out.println("Age should be below 110");
-					continue;}
-					}
-				
+						System.out.println("Age should be below 110");
+					
+					}while(ageFlag==false);
 					
 					//Customer Phone Number
 					do
@@ -92,18 +90,19 @@ Scanner get = new Scanner(System.in);
 						if(pwdFlag==false)
 							System.out.println("incorrect pattern, password eg:Abc123@");
 					}while(pwdFlag==false);
+					Customer newUser1 = new Customer();
 					Account newUser = new Account();
 					
-					newUser.setCustName(name);
-					newUser.setCustAge(age);
-					newUser.setCustPhoneNo(phoneNo);
+					newUser1.setCustName(name);
+					newUser1.setCustAge(age);
+					newUser1.setCustPhoneNo(phoneNo);
 					newUser.setCustBal(amt);
 					newUser.setCustPwd(pwd);
 					custAccId = service.addAccDao(newUser);
 					System.out.println("Account created successfully");
 					System.out.println("Your Account number is "+custAccId);
 					break;
-	}
+			}
 				
 			case 2:
 			{	
@@ -142,7 +141,6 @@ Scanner get = new Scanner(System.in);
 							
 								case 1:
 								{
-									
 									do
 									{
 										System.out.println("Enter the Amount to be deposited :");
@@ -181,7 +179,9 @@ Scanner get = new Scanner(System.in);
 								case 4:
 									System.out.println("Enter the Account Number to which u have to send :");
 									int ftAccNo = get.nextInt();
+									
 									double ftAmt;
+									
 									
 									do
 									{
@@ -229,4 +229,3 @@ Scanner get = new Scanner(System.in);
 }while(choice==1);
 	}
 }
-
