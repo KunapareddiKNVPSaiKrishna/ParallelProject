@@ -1,16 +1,22 @@
 package com.project.wallet.dao;
 
+import java.util.List;
+
 import com.project.wallet.bean.Account;
-import com.project.wallet.exception.WalletException;
 
 public interface IWalletAccess {
-	
-	int accCreation(Account a);
-	
-	Account loginUser(int accNo) throws WalletException;
-	
-	void updateDetails(int accNo, Account a);
 
+	boolean testLogin(long accountNumber, String password);
+
+	boolean addAccountDetails(Account account);
+
+	double showBalance();
+
+	boolean deposit(double amount);
+
+	boolean withdraw(double amount);
+
+	boolean printTransaction();
+
+	boolean fundTransfer(long payeeAccountNumber, double amount);
 }
-
-

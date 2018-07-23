@@ -1,231 +1,284 @@
 package com.project.wallet.WalletApp;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.project.wallet.bean.Account;
 import com.project.wallet.bean.Customer;
-import com.project.wallet.exception.WalletException;
+import com.project.wallet.exception.AccountNotCreated;
+import com.project.wallet.service.WalletDataValidate;
 import com.project.wallet.service.WalletBasicService;
 
 public class User {
-public static void main(String[] args) throws WalletException  {
-	
 
-	int choice, age,custAccId;
-	String phoneNo,name,pwd;
-    boolean nameFlag=false,ageFlag=false,pwdFlag=false,phoneNoFlag=false,amtFlag=false;
-    double amt;
-    boolean loginCheck = false;
+	public static void main(String[] args) {
 
-Scanner get = new Scanner(System.in);
+		int i = 0;
 
-    WalletBasicService service = new WalletBasicService();
-	do {
-		System.out.println("\n************* XYZ MyWallet *************");
-		System.out.println("Choose an operation");
-		System.out.println("1. Create New Account");
-		System.out.println("2. Login");
-		System.out.println("3. Exit");
-		System.out.println("******************************");
-		System.out.print("\nPlease Enter a Choice : ");
-		choice = get.nextInt();
-		System.out.println("\n******************************");
-		switch(choice)
-		{
-		
-		case 1 :// Creating a new Account for the user
-				
-		{
-					//customer name
-					do
-					{
-						System.out.println("Enter the name of the Customer :");
-						name=get.next();
-						name=get.nextLine();
-						nameFlag=service.validateCustName(name);
-						nameFlag=true;
-						if(nameFlag==false)
-							System.out.println("Name should be entered in proper format(eg.Robert Downey)");
-						
-					}while(nameFlag==false);
-					
-			
-					//Customer Age
-					do
-					{
-					System.out.println("Enter Customer age : ");
-					
-					age = get.nextInt();
-					ageFlag= service.validateCustAge(age);
-					if(ageFlag==false)
-						System.out.println("Age should be below 110");
-					
-					}while(ageFlag==false);
-					
-					//Customer Phone Number
-					do
-					{
-						System.out.println("Enter Customer phone number : ");
-						phoneNo = get.next();
-						phoneNoFlag = service.validateCustPhoneNumber(phoneNo);
-						if(phoneNoFlag==false)
-							System.out.println("Phone number should be of 10 digits");
-					}while(phoneNoFlag==false);
-					
-					//initial deposit amount
-					do
-					{
-						System.out.println("Enter the initial amount to be deposited : ");
-						amt = get.nextDouble();
-						amtFlag = service.validateAmt(amt);
-						if(amtFlag==false)
-							System.out.println("initial deposit can be greater than 0.00");
-					}while(amtFlag==false);
-					//set password for the Account
-					do
-					{
-						System.out.println("Set password for your account : ");
-						pwd = get.next();
-						pwdFlag = service.validateCustPwd(pwd);
-						if(pwdFlag==false)
-							System.out.println("incorrect pattern, password eg:Abc123@");
-					}while(pwdFlag==false);
-					Customer newUser1 = new Customer();
-					Account newUser = new Account();
-					
-					newUser1.setCustName(name);
-					newUser1.setCustAge(age);
-					newUser1.setCustPhoneNo(phoneNo);
-					newUser.setCustBal(amt);
-					newUser.setCustPwd(pwd);
-					custAccId = service.addAccDao(newUser);
-					System.out.println("Account created successfully");
-					System.out.println("Your Account number is "+custAccId);
-					break;
+		do {
+			System.out.println("*************XYZ MyWallet*****************");
+			System.out.println("1.Create Account");
+			System.out.println("2.Login");
+			System.out.println("3.exit");
+			System.out.println("******************************************");
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+			try {
+				i = Integer.parseInt(br.readLine());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-				
-			case 2:
-			{	
-				
-				pwdFlag = false;
-				System.out.println("\n************* XYZ MyWallet *************");
-				System.out.println("Enter the Account Number :");
-				//logic for user id check;
-				custAccId = get.nextInt();
-				loginCheck = service.checkLogin(custAccId);
-				if(loginCheck==true)
-				{
-					
-					do {
-						System.out.println("Enter the Password");
-						//logic for password check;
-						pwd = get.next();
-						pwdFlag = service.checkPassword(pwd);
-							if(pwdFlag==true)
-							{
-								do {
-								System.out.println("\n*********** Welcome " +service.currentUser()+" ***********");
-								System.out.println("Choose an operation");
-								System.out.println("1. Deposit Amount");
-								System.out.println("2. Withdraw Amount");
-								System.out.println("3. Show Balance");
-								System.out.println("4. Fund Transfer");
-								System.out.println("5. Print Transactions");
-								System.out.println("6. Exit");
-								System.out.println("******************************");
-								System.out.print("\nPlease Enter a Choice : ");
-								choice = get.nextInt();
-								System.out.println("\n******************************");
-								switch(choice)
-								{
-							
-								case 1:
-								{
-									do
-									{
-										System.out.println("Enter the Amount to be deposited :");
-										amt = get.nextDouble();
-										amtFlag = service.validateAmt(amt);
-										if(amtFlag==false)
-											System.out.println("Amount Should be greater than 0.00");
-									}while(amtFlag==false);
-									amt = service.depositDao(amt);
-									System.out.println("Your current balance is :"+amt);
-									break;
-								}
-								case 2:
-								{
-									
-									do
-									{
-										System.out.println("Enter the Amount to be Withdrawn :");
-										amt = get.nextDouble();
-										amtFlag = service.validateAmt(amt);
-										if(amtFlag==false)
-											System.out.println("Amount Should be greater than 0.00");
-									}while(amtFlag==false);
-									amt = service.withdrawDao(amt);
-									System.out.println("Your current balance is :"+amt);
-									break;
-								}
-								case 3:
-								{
-									
-									amt = service.showBalDao();
-									System.out.println("Your current balance is :"+amt);
-									break;
-								}
-								
-								case 4:
-									System.out.println("Enter the Account Number to which u have to send :");
-									int ftAccNo = get.nextInt();
-									
-									double ftAmt;
-									
-									
-									do
-									{
-										System.out.println("Enter the amount to be transfered : ");
-										ftAmt = get.nextDouble();
-										amtFlag = service.validateAmt(ftAmt);
-										if(amtFlag==false)
-											System.out.println("should be greater than 0.00");
-									}while(amtFlag==false);
-									
-									boolean ftFlag = service.transferAmt(ftAccNo,ftAmt);
-								if(ftFlag==true)
-								{
-									System.out.println("success");
-								}
-								break;
-								case 5:
-									service.printTransdetails();
-									break;
-							
-								}
-								System.out.print("Do you want to continue? 1-Yes  0 - No : ");
-								choice = get.nextInt();
-								}while(choice==1);
-								break;
-								}
-							
-					}while(pwdFlag==false);
-				}
-				else
-				{
-					System.out.println("invalid login, try again :(");
-				}
-			System.out.println("Thank You Banking With Us");	
-			System.out.println("Wish to go to Main Menu ?\n");	
-			
-}
-		
-		}
-		
-		System.out.print("Do you want to continue? 1-Yes  0 - No : ");
-		
-		choice = get.nextInt();
 
-}while(choice==1);
+			switch (i) {
+
+			case 1:
+				createAccount();
+				break;
+
+			case 2:
+				login();
+				break;
+
+			case 3:
+				System.exit(0);
+				break;
+			}
+		} while (i != 3);
+
+	}
+	private static void createAccount() {
+		
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Account account = new Account();
+		Customer custDetails = new Customer();
+
+		WalletDataValidate validate = new WalletDataValidate();
+		
+		
+		
+List<String> list2 = new ArrayList();
+account.setpTrans(list2);
+
+		System.out.println("Enter Name of the customer : ");
+		String fullName;
+		try {
+
+			int count = 0;
+			fullName = br.readLine();
+
+			custDetails.setName(fullName);
+
+			System.out.println("Enter Email: ");
+			String emailID = br.readLine();
+			custDetails.setEmail(emailID);
+
+			System.out.println("Enter customer Phone Number : ");
+
+			do {
+				try {
+					Long mobileNumber = Long.parseLong(br.readLine());
+
+					boolean isValidMobileNumber = validate.validateMobileNumber(mobileNumber);
+
+					if (isValidMobileNumber) {
+						custDetails.setMobileNumber(mobileNumber);
+						count = 1;
+					} else {
+						System.out.println("Enter correct  Phone Number : ");
+					}
+
+				} catch (NumberFormatException e) {
+					System.err.println("Enter correct  Phone Number : ");
+				}
+
+			} while (count < 1);
+
+			System.out.println("Enter Aadhar Number : ");
+			do {try {
+				Long aadharNumber = Long.parseLong(br.readLine());
+				boolean isValidAadharNumber = validate.validateAadharNumber(aadharNumber);
+				if (isValidAadharNumber) {
+					custDetails.setAadharNumber(aadharNumber);
+					count = 2;
+				} else {
+
+					System.out.println("Enter correct  Aadhar Number : ");
+				}
+				}catch (NumberFormatException e){
+					System.err.println("Enter correct  Aadhar Number : ");
+				}
+			} while (count < 2);
+
+			System.out.println("Enter gender(Male/Female) : ");
+			String gender = br.readLine();
+			custDetails.setGender(gender);
+
+			System.out.println("Enter customer  age : ");
+			int age = Integer.parseInt(br.readLine());
+			custDetails.setAge(age);
+
+			System.out.println("Enter initial amount to be deposited :  ( Minimum amount to create account is 500.00)");
+			double balance = Double.parseDouble(br.readLine());
+			account.setBal(balance);
+
+			
+		
+			long accountNumber = (long) (Math.random() * 100000 + 9999);
+			account.setAcntNum(accountNumber);
+
+			WalletBasicService service = new WalletBasicService();
+			if (service.addAccountDetails(account)) {
+				System.out.println("Account created succesfully");
+				System.out.println("Set password for your account !");
+				String password = br.readLine();
+				account.setPassword(password);
+				account.setCustomer(custDetails);
+
+				System.out.println("Your account number is: " + accountNumber);
+
+			} else {
+				throw new AccountNotCreated();
+				}
+			}catch(AccountNotCreated e) {
+				System.err.println("Failed to create account !!!!");
+			}
+ catch (IOException e) {
+		
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+		System.err.println("cannot enter alphabets");
+		}
+
+	}
+
+	private static void login() {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int i = 0;
+		System.out.println("Enter account number : ");
+		try {
+
+			long accountNumber = Long.parseLong(br.readLine());
+			System.out.println("Enter the password : ");
+			String password = br.readLine();
+			WalletBasicService service = new WalletBasicService();
+			if (service.testLogin(accountNumber, password)) {
+
+				do {
+
+					System.out.println("1.Show Balance");
+					System.out.println("2.Deposit");
+					System.out.println("3.WithDraw");
+					System.out.println("4.Fund Transfer");
+					System.out.println("5.Print Transaction");
+					System.out.println("6.exit");
+
+					try {
+						i = Integer.parseInt(br.readLine());
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					switch (i) {
+
+					case 1:
+						System.out.println(service.showBalance());
+						break;
+
+					case 2:
+						try {
+
+							System.out.println("Enter the amount to be deposited");
+							double amount = Double.parseDouble(br.readLine());
+
+							if (service.deposit(amount)) {
+								System.out.println("The Amount deposited in " + accountNumber);
+							} else {
+								System.out.println("Account doesnot exist");
+							}
+
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						break;
+
+					case 3:
+						try {
+
+							System.out.println("Enter the amount to withdraw");
+							double amount = Double.parseDouble(br.readLine());
+
+							if(service.withdraw(amount)) {
+								System.out.println("Withdraw Complete");
+							}else {
+								
+									System.out.println("Amount is greater than available balance");
+								
+							}
+
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						break;
+
+					case 4:
+
+						System.out.println("Enter payee account number");
+						long payeeAccountNumber = Long.parseLong(br.readLine());
+						System.out.println("Enter amount to transfer");
+						double amount = Double.parseDouble(br.readLine());
+						if (service.fundTransfer(payeeAccountNumber, amount))
+							;
+						break;
+
+					case 5:
+						service.printTransaction();
+
+						break;
+
+					case 6:
+
+						break;
+					}
+				} while (i != 6);
+
+			} else {
+				System.out.println("Account not found");
+			}
+
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	}
+
+
+
+	private static void exit() {
+		System.out.println("Thankyou for using Application");
+		System.exit(0);
+
 	}
 }

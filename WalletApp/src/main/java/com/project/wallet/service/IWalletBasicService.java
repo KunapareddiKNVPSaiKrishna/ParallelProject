@@ -1,18 +1,21 @@
 package com.project.wallet.service;
 
+import java.util.List;
+
 import com.project.wallet.bean.Account;
-import com.project.wallet.exception.WalletException;
 
 public interface IWalletBasicService {
+	boolean testLogin(long accountNumber, String password);
 
-	
-	int addAccDao(Account a);
-	double depositDao(double money);
-	double withdrawDao(double money) ;
-	double showBalDao();
-	boolean checkLogin(int accNo) throws WalletException;
-	boolean checkPassword(String pwd);
-	String currentUser();
-	boolean transferAmt(int toAccNo, double money) throws WalletException;
-	void printTransdetails();
+	boolean addAccountDetails(Account account);
+
+	Double showBalance();
+
+	boolean deposit(double amount);
+
+	boolean withdraw(double amount);
+
+	boolean printTransaction();
+
+	boolean fundTransfer(long payeeAccountNumber, double amount);
 }
